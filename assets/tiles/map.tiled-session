@@ -1,0 +1,47 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "map.tmx",
+    "expandedProjectPaths": [
+        "."
+    ],
+    "fileStates": {
+        "": {
+            "scaleInDock": 1
+        },
+        "map.tmx": {
+            "scale": 1.62390625,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 550.5243914173001,
+                "y": 450.14913884345225
+            }
+        },
+        "map.tmx#maptextur": {
+            "scaleInDock": 1
+        }
+    },
+    "last.exportedFilePath": "C:/Users/cohen/Desktop/GAME/game2/assets/tiles",
+    "last.imagePath": "C:/Users/cohen/Desktop/GAME/game2/assets/sprites",
+    "map.height": 23,
+    "map.lastUsedExportFilter": "Lua files (*.lua)",
+    "map.lastUsedFormat": "tmx",
+    "map.tileHeight": 16,
+    "map.tileWidth": 16,
+    "map.width": 40,
+    "openFiles": [
+        "map.tmx"
+    ],
+    "project": "map.tiled-project",
+    "property.type": "bool",
+    "recentFiles": [
+        "map.tmx"
+    ],
+    "tileset.embedInMap": true,
+    "tileset.tileSize": {
+        "height": 16,
+        "width": 16
+    }
+}
