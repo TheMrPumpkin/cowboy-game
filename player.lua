@@ -1,5 +1,7 @@
 player = {}
 
+local anim8 = require 'assets.libraries.anim8'
+
 function player:load()
     self.x = 100
     self.y = 0
@@ -13,11 +15,23 @@ function player:load()
     self.gravity = 1500
     self.ground = false
     self.jumpAmount = -500
+
     self.physics = {}
     self.physics.body = love.physics.newBody(world, self.x, self.y, "dynamic")
     self.physics.body:setFixedRotation(true)
     self.physics.shape = love.physics.newRectangleShape(self.width, self.height)
     self.physics.fixture = love.physics.newFixture(self.physics.body, self.physics.shape)
+
+ 
+    self.spriteSheet = love.graphics.newImage("assets/sprites/player.png")
+
+    self.grid = anim8.newGrid(32, 32,
+        self.spriteSheet:getWidth(),
+        self.spriteSheet:getHeight()
+    )
+
+    self.animation = {}
+    self.animation.idle = anim8.newAnimation(self.grid('1-8', 1), 0.1)
 end
 
 function player:applyegravity(dt)
@@ -28,9 +42,9 @@ end
 
 function player:update(dt)
     self:syncphysics()
-    player:move(dt)
-    player:applyegravity(dt)
-    player:jump()
+    self:move(dt)
+    self:applyegravity(dt)
+ 
 end
 
 function player:syncphysics()
@@ -87,6 +101,8 @@ function player:move(dt)
     else
         self:applyeFriction(dt)
     end
+
+    self.animation.idle:update(dt)
 end
 
 function player:applyeFriction(dt)
@@ -106,10 +122,7 @@ function player:applyeFriction(dt)
 end
 
 function player:draw()
-    love.graphics.rectangle("fill",
-        self.x - self.width / 2,
-        self.y - self.height / 2,
-        self.width,
-        self.height
-    )
+ 
+    self.animation.idle:draw(self.spriteSheet, self.x, self.y, 0, 1, 1, 16, 16)
+
 end
