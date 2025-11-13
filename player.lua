@@ -53,7 +53,7 @@ function player:beginContact(a, b, collision)
 end
 
 function player:jump(key)
-    if key == "space" then
+    if key == "space" and self.ground then
         self.yVel = self.jumpAmount
     end
 end
