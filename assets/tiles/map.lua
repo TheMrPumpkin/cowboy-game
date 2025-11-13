@@ -111,7 +111,7 @@ return {
           x = 0.0508679,
           y = 321.232,
           width = 638,
-          height = 44.9426,
+          height = 15.6093,
           rotation = 0,
           visible = true,
           properties = {}
