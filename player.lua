@@ -60,11 +60,11 @@ end
 
 function player:land()
     self.yVel = 0
-    self.ground = false
+    self.ground = true
 end
 
 function player:endContact(a, b, collision)
-
+    self.ground = false
 end
 
 function player:move(dt)
