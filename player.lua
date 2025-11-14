@@ -1,19 +1,17 @@
 player = {}
 
-local anim8 = require 'assets.libraries.anim8'
 love.graphics.setDefaultFilter("nearest", "nearest")
 
 function player:load()
     self.x = 100
     self.y = 0
 
-
     self.width = 32
     self.height = 32
 
     self.xVel = 0
     self.yVel = 100
-    self.maxspeed = 200
+    self.maxspeed = 100
     self.acceleration = 4000
     self.friction = 3500
     self.gravity = 1500
@@ -27,14 +25,16 @@ function player:load()
     self.physics.fixture = love.physics.newFixture(self.physics.body, self.physics.shape)
 
     self.spriteSheet = love.graphics.newImage("assets/sprites/player.png")
-
-
+    local anim8 = require 'assets.libraries.anim8'
     self.grid = anim8.newGrid(32, 32,
         self.spriteSheet:getWidth(),
         self.spriteSheet:getHeight()
     )
     self.animation = {}
     self.animation.idle = anim8.newAnimation(self.grid('1-2', 1), 0.2)
+    self.animation.walk = anim8.newAnimation(self.grid('2-5', 1), 0.2)
+
+    self.currentAnim = self.animation.idle  
 end
 
 function player:applyegravity(dt)
@@ -82,6 +82,8 @@ function player:endContact(a, b, collision)
 end
 
 function player:move(dt)
+    local moving = false
+
     if love.keyboard.isDown("right", "d") then
         if self.xVel < self.maxspeed then
             local new = self.xVel + self.acceleration * dt
@@ -91,7 +93,7 @@ function player:move(dt)
                 self.xVel = self.maxspeed
             end
         end
-
+        moving = true
     elseif love.keyboard.isDown("left", "a") then
         if self.xVel > -self.maxspeed then
             local new = self.xVel - self.acceleration * dt
@@ -101,6 +103,7 @@ function player:move(dt)
                 self.xVel = -self.maxspeed
             end
         end
+        moving = true
     else
         self:applyFrictionX(dt)
     end
@@ -114,6 +117,7 @@ function player:move(dt)
                 self.yVel = self.maxspeed
             end
         end
+        moving = true
 
     elseif love.keyboard.isDown("up", "w") then
         if self.yVel > -self.maxspeed then
@@ -124,13 +128,20 @@ function player:move(dt)
                 self.yVel = -self.maxspeed
             end
         end
+        moving = true
     else
         self:applyFrictionY(dt)
     end
 
-    self.animation.idle:update(dt)
-end
+     
+    if moving then
+        self.currentAnim = self.animation.walk
+    else
+        self.currentAnim = self.animation.idle
+    end
 
+    self.currentAnim:update(dt)   
+end
 
 function player:applyFrictionX(dt)
     if self.xVel > 0 then
@@ -151,11 +162,6 @@ function player:applyFrictionY(dt)
         if self.yVel > 0 then self.yVel = 0 end
     end
 end
-
-
-
-
-
 
 function player:applyeFriction(dt)
     if self.xVel > 0 then
@@ -180,7 +186,7 @@ function player:draw()
     local originX = frameWidth / 2
     local originY = frameHeight / 2
 
-    self.animation.idle:draw(
+    self.currentAnim:draw(
         self.spriteSheet,
         self.x, self.y,   
         0,
