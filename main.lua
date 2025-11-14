@@ -25,6 +25,7 @@ function love.draw()
     love.graphics.pop()
 end
 
+
 function love.keypressed(key)
     player:jump(key)
 end

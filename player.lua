@@ -2,11 +2,15 @@ player = {}
 
 local anim8 = require 'assets.libraries.anim8'
 love.graphics.setDefaultFilter("nearest", "nearest")
+
 function player:load()
     self.x = 100
     self.y = 0
-    self.width = 16
-    self.height = 48
+
+
+    self.width = 32
+    self.height = 32
+
     self.xVel = 0
     self.yVel = 100
     self.maxspeed = 200
@@ -22,8 +26,8 @@ function player:load()
     self.physics.shape = love.physics.newRectangleShape(self.width, self.height)
     self.physics.fixture = love.physics.newFixture(self.physics.body, self.physics.shape)
 
-
     self.spriteSheet = love.graphics.newImage("assets/sprites/player.png")
+
 
     self.grid = anim8.newGrid(32, 32,
         self.spriteSheet:getWidth(),
@@ -96,6 +100,8 @@ function player:move(dt)
             else
                 self.xVel = -self.maxspeed
             end
+
+            
         end
     else
         self:applyeFriction(dt)
@@ -121,5 +127,17 @@ function player:applyeFriction(dt)
 end
 
 function player:draw()
-    player.animation.idle:draw(player.spriteSheet, self.x, self.y, 0, 1, 1, self.spriteSheet / 2, self.spriteSheet / 2)
+    local frameWidth, frameHeight = 32, 32
+    local scale = 2
+
+    local originX = frameWidth / 2
+    local originY = frameHeight / 2
+
+    self.animation.idle:draw(
+        self.spriteSheet,
+        self.x, self.y,   
+        0,
+        scale, scale,
+        originX, originY
+    )
 end
