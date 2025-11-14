@@ -33,7 +33,6 @@ function player:load()
         self.spriteSheet:getWidth(),
         self.spriteSheet:getHeight()
     )
-
     self.animation = {}
     self.animation.idle = anim8.newAnimation(self.grid('1-2', 1), 0.2)
 end
@@ -47,7 +46,7 @@ end
 function player:update(dt)
     self:syncphysics()
     self:move(dt)
-    self:applyegravity(dt)
+  --  self:applyegravity(dt)
 end
 
 function player:syncphysics()
@@ -70,9 +69,7 @@ function player:beginContact(a, b, collision)
 end
 
 function player:jump(key)
-    if key == "space" and self.ground then
-        self.yVel = self.jumpAmount
-    end
+   
 end
 
 function player:land()
@@ -87,28 +84,78 @@ end
 function player:move(dt)
     if love.keyboard.isDown("right", "d") then
         if self.xVel < self.maxspeed then
-            if self.xVel + self.acceleration * dt < self.maxspeed then
-                self.xVel = self.xVel + self.acceleration * dt
+            local new = self.xVel + self.acceleration * dt
+            if new < self.maxspeed then
+                self.xVel = new
             else
                 self.xVel = self.maxspeed
             end
         end
+
     elseif love.keyboard.isDown("left", "a") then
         if self.xVel > -self.maxspeed then
-            if self.xVel - self.acceleration * dt > -self.maxspeed then
-                self.xVel = self.xVel - self.acceleration * dt
+            local new = self.xVel - self.acceleration * dt
+            if new > -self.maxspeed then
+                self.xVel = new
             else
                 self.xVel = -self.maxspeed
             end
-
-            
         end
     else
-        self:applyeFriction(dt)
+        self:applyFrictionX(dt)
+    end
+
+    if love.keyboard.isDown("down", "s") then
+        if self.yVel < self.maxspeed then
+            local new = self.yVel + self.acceleration * dt
+            if new < self.maxspeed then
+                self.yVel = new
+            else
+                self.yVel = self.maxspeed
+            end
+        end
+
+    elseif love.keyboard.isDown("up", "w") then
+        if self.yVel > -self.maxspeed then
+            local new = self.yVel - self.acceleration * dt
+            if new > -self.maxspeed then
+                self.yVel = new
+            else
+                self.yVel = -self.maxspeed
+            end
+        end
+    else
+        self:applyFrictionY(dt)
     end
 
     self.animation.idle:update(dt)
 end
+
+
+function player:applyFrictionX(dt)
+    if self.xVel > 0 then
+        self.xVel = self.xVel - self.friction * dt
+        if self.xVel < 0 then self.xVel = 0 end
+    elseif self.xVel < 0 then
+        self.xVel = self.xVel + self.friction * dt
+        if self.xVel > 0 then self.xVel = 0 end
+    end
+end
+
+function player:applyFrictionY(dt)
+    if self.yVel > 0 then
+        self.yVel = self.yVel - self.friction * dt
+        if self.yVel < 0 then self.yVel = 0 end
+    elseif self.yVel < 0 then
+        self.yVel = self.yVel + self.friction * dt
+        if self.yVel > 0 then self.yVel = 0 end
+    end
+end
+
+
+
+
+
 
 function player:applyeFriction(dt)
     if self.xVel > 0 then
