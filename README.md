@@ -1,5 +1,4 @@
 # cowboy game
-my first game 
 COWBOY was my first game but I will move on to other
 projects because the game was
 combined with many things that made it 
